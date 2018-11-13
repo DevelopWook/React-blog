@@ -90,12 +90,6 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         ],
         sourceMap: shouldUseSourceMap,
       },
-    },
-    {
-      loader: require.resolve('sass-loader'),
-      options: {
-        includePaths: [paths.globalStyles]
-      }
     }
   ];
   if (preProcessor) {
@@ -394,6 +388,14 @@ module.exports = {
             // Remove this when webpack adds a warning or an error for this.
             // See https://github.com/webpack/webpack/issues/6571
             sideEffects: true,
+            use: getStyleLoaders(
+              {
+                importLoaders: 2,
+                modules: true,
+                getLocalIdent: getCSSModuleLocalIdent,
+              },
+              'sass-loader'
+            ),
           },
           // Adds support for CSS Modules, but using SASS
           // using the extension .module.scss or .module.sass
