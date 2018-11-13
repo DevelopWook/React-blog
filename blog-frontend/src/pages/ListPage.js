@@ -4,7 +4,6 @@ const ListPage = () => {
     return (
         <div>
             List
-            good
         </div>
     )
 }
