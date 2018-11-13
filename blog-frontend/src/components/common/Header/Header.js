@@ -9,7 +9,7 @@ const Header = () => (
     <header className={cx('header')}>
         <div className={cx('header-content')}>
             <div className={cx('brand')}>
-                <Link tooo="/">reactblog</Link>
+                <Link to="/">reactblog</Link>
             </div>
             <div className={cx('right')}>
                 {/* 조건에 따라 버튼 렌더링 */}
