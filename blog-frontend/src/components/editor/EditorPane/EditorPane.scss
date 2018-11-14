@@ -21,6 +21,13 @@
     .code-editor {
         flex: 1; // 남는 영역 다 차지
         background: $oc-gray-9;
+        display: flex;
+        flex-direction: column; // .CodeMirror가 세로 영역을 전부 차지한다.
+        :global .CodeMirror { // :global을 해야 CSS 모듈을 적용하지 않는다.
+            font-size: 1rem;
+            flex: 1;
+            font-family: 'D2 Coding';
+        }
     }
 
     .tags {
