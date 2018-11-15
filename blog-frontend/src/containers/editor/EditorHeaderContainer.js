@@ -23,10 +23,7 @@ class EditorHeaderContainer extends Component {
             title,
             body: markdown,
             // 태그 텍스트를 ,로 분리시키고 앞뒤 공백을 지운 후 중복되는 값을 제거한다. // filter로 공백 태그도 제거한다.
-            tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()).filter(tag => {
-                if(tag === '') return false;
-                else return true;
-            }))]
+            tags: tags === "" ? [] : [...new Set(tags.split(',').map(tag => tag.trim()).filter(tag => tag !== ''))]
         };
         console.log('pbw tags?', tags);
         console.log('pbw post?', post);
