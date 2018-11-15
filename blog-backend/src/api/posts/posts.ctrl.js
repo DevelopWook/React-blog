@@ -46,7 +46,14 @@ exports.write = async (ctx) => {
     }
 }
 exports.list = async (ctx) => {
+    // page가 주어지지 않았다면 1로 설정.
+    // query로 받으면 문자열이기 때문에 숫자로 변환.
     const page = parseInt(ctx.query.page || 1, 10);
+    const { tag } = ctx.query;
+
+    const query = tag ? {
+        tags: tag // tags 배열에 tag를 가진 포스트 추가
+    } : {};
 
     // 잘못된 페이지가 주어졌다면 오류
     if(page < 1) {
@@ -55,7 +62,7 @@ exports.list = async (ctx) => {
     }
 
     try{
-        const posts = await Post.find()
+        const posts = await Post.find(query)
             .sort({_id: -1})
             .limit(10)
             .skip((page-1)*10)
@@ -63,10 +70,10 @@ exports.list = async (ctx) => {
             .exec();
 
 
-        const pageCount = await Post.count().exec();
+        const pageCount = await Post.count(query).exec();
         const limitBodyLength = post => ({
             ...post,
-            body: post.body.length < 200 ? post.body : `${post.body.slice(0, 50)}...ㅎㅎ`
+            body: post.body.length < 200 ? post.body : `${post.body.slice(0, 50)}...ㅎㅎ by pbw`
         })
         ctx.body = posts.map(limitBodyLength);
 
