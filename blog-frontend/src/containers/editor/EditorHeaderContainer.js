@@ -3,13 +3,24 @@ import EditorHeader from 'components/editor/EditorHeader';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 
 import * as editorActions from 'store/modules/editor';
 
 class EditorHeaderContainer extends Component {
     componentDidMount() {
-        const { EditorActions } = this.props;
+        const { EditorActions, location } = this.props;
         EditorActions.initialize(); // 에디터를 초기화한다.
+
+        // 쿼리 파싱
+        const { id } = queryString.parse(location.search);
+        console.log('pbw id?', id);
+        console.log('pbw location?', location);
+
+        if (id) {
+            // id가 존재하면 포스트 불러오기
+            EditorActions.getPost(id);
+        }
     }
 
     handleGoBack = () => {
@@ -33,7 +44,7 @@ class EditorHeaderContainer extends Component {
             // 페이지를 이동시킨다.
             // 주의: postId는 위쪽에서 레퍼런스를 만들지 않고 이 자리에서 this.props.postId를 조회해야 한다.(현재 값을 불러오기 위해)
             history.push(`/post/${this.props.postId}`);
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     }
