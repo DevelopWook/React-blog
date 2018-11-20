@@ -10,11 +10,6 @@ const isDev = process.env.NODE_ENV === 'development';
 const devTools = isDev && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const composeEnhancers = devTools || compose;
 
-if(true) {
-    console.log('pbw is Dev?', isDev);
-    console.log('pbw devTools? ', devTools);
-}
-
 // preloadedState는 추후 서버사이드 렌더링을 했을 때 전달받는 초기 상태입니다.
 const configure = (preloadedState) => createStore(reducers, preloadedState, composeEnhancers(
     applyMiddleware(...middlewares)
