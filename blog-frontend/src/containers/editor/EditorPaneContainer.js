@@ -6,9 +6,9 @@ import * as editorActions from 'store/modules/editor';
 
 class EditorPaneContainer extends Component {
 
-    handleChangeInput = ({name, value}) => {
+    handleChangeInput = ({ name, value }) => {
         const { EditorActions } = this.props;
-        EditorActions.changeInput({name, value});
+        EditorActions.changeInput({ name, value });
     }
 
     render() {

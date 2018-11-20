@@ -40,7 +40,7 @@ class EditorPane extends Component {
   handleChange = (e) => {
     const { onChangeInput } = this.props;
     const { value, name } = e.target;
-    onChangeInput({name, value});
+    onChangeInput({ name, value });
   }
 
   handleChangeMarkdown = (doc) => {
@@ -58,10 +58,11 @@ class EditorPane extends Component {
       이 과정에서 텍스트 커서의 위치가 초기화되기 때문에,
       저장한 커서의 위치가 있으면 해당 위치로 설정한다.
     */
-    if(prevProps.markdown !== this.props.markdown) {
+    if (prevProps.markdown !== this.props.markdown) {
       const { codeMirror, cursor } = this;
-      if(!codeMirror) return; // 인스턴스를 아직 만들지 않았을 때
-      if(!cursor) return; // 커서가 없을 때
+      if (!codeMirror) return; // 인스턴스를 아직 만들지 않았을 때
+      codeMirror.setValue(this.props.markdown);
+      if (!cursor) return; // 커서가 없을 때
       codeMirror.setCursor(cursor);
     }
   }
@@ -72,19 +73,19 @@ class EditorPane extends Component {
 
     return (
       <div className={cx('editor-pane')}>
-        <input 
-          className={cx('title')} 
-          placeholder="제목을 입력하세요" 
-          name="title" 
+        <input
+          className={cx('title')}
+          placeholder="제목을 입력하세요"
+          name="title"
           value={title}
           onChange={handleChange}
         />
-        <div className={cx('code-editor')} ref={ref => this.editor=ref}></div>
+        <div className={cx('code-editor')} ref={ref => this.editor = ref}></div>
         <div className={cx('tags')}>
           <div className={cx('description')}>태그</div>
-          <input 
-            name="tags" 
-            placeholder="태그를 입력하세요 (쉼표로 구분)" 
+          <input
+            name="tags"
+            placeholder="태그를 입력하세요 (쉼표로 구분)"
             value={tags}
             onChange={handleChange}
           />
