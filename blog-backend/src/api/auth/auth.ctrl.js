@@ -26,7 +26,7 @@ exports.check = (ctx) => {
             ! 문자를 두 번 사용하여
             값이 존재하지 않을 때도 false를 반환하도록 설정한다.
         */
-        logged: !!ctx.request.logged
+        logged: !!ctx.session.logged
     };
 }
 

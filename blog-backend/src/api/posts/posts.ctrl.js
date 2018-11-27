@@ -6,7 +6,7 @@ exports.checkObjectId = (ctx, next) => {
     const { id } = ctx.params;
 
     // 검증 실패
-    if(!ObjectId.isValid(id)) {
+    if (!ObjectId.isValid(id)) {
         ctx.status = 400; //400 Bad Request
         return null;
     }
@@ -24,7 +24,7 @@ exports.write = async (ctx) => {
 
     // 첫 번째 파라미터는 검증할 객체, 두번째는 스키마
     const result = Joi.validate(ctx.request.body, schema);
-    if(result.error) {
+    if (result.error) {
         ctx.status = 400;
         ctx.body = result.error;
         return;
@@ -37,10 +37,10 @@ exports.write = async (ctx) => {
         title, body, tags
     })
 
-    try{
+    try {
         await post.save(); // 데이터베이스에 등록합니다.
         ctx.body = post; // 저장된 결과를 반환합니다.
-    } catch(e) {
+    } catch (e) {
         // 데이터베이스의 오류가 발생합니다.
         ctx.throw(e, 500);
     }
@@ -56,16 +56,16 @@ exports.list = async (ctx) => {
     } : {};
 
     // 잘못된 페이지가 주어졌다면 오류
-    if(page < 1) {
+    if (page < 1) {
         ctx.status = 400;
         return;
     }
 
-    try{
+    try {
         const posts = await Post.find(query)
-            .sort({_id: -1})
+            .sort({ _id: -1 })
             .limit(10)
-            .skip((page-1)*10)
+            .skip((page - 1) * 10)
             .lean()
             .exec();
 
@@ -77,13 +77,13 @@ exports.list = async (ctx) => {
         })
         ctx.body = posts.map(limitBodyLength);
 
-        
+
         // 마지막 페이지 알려주기
         // ctx.set은 response header를 설정
         ctx.set('Last-Page', Math.ceil(pageCount / 10));
 
         // ctx.body = posts;
-    } catch(e) {
+    } catch (e) {
         ctx.throw(e, 500);
     }
 }
@@ -92,12 +92,12 @@ exports.read = async (ctx) => {
     try {
         const post = await Post.findById(id).exec();
         // 포스트가 존재하지 않을 경우
-        if(!post) {
+        if (!post) {
             ctx.status = 404;
             return;
         }
         ctx.body = post;
-    } catch(e) {
+    } catch (e) {
         ctx.throw(e, 500);
     }
 }
@@ -106,7 +106,7 @@ exports.remove = async (ctx) => {
     try {
         await Post.findByIdAndRemove(id).exec();
         ctx.status = 204;
-    } catch(e) {
+    } catch (e) {
         ctx.throw(e, 500);
     }
 }
@@ -119,14 +119,21 @@ exports.update = async (ctx) => {
             // 설정하지 않으면 업데이트되기 전의 객체를 반환합니다.
         }).exec();
         // 포스트가 존재하지 않을 경우
-        if(!post) {
+        if (!post) {
             ctx.status = 404;
             return;
         }
         ctx.body = post;
-    } catch(e) {
+    } catch (e) {
         ctx.throw(e, 500);
     }
+}
+exports.checkLogin = (ctx, next) => {
+    if (!ctx.session.logged) {
+        ctx.status = 401; // Unauthorized
+        return null;
+    }
+    return next();
 }
 
 
