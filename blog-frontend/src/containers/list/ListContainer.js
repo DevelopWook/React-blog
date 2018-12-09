@@ -4,7 +4,7 @@ import Pagination from 'components/list/Pagination';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as listActions from 'store/modules/list';
-import list from '../../store/modules/list';
+// import list from '../../store/modules/list';
 
 class ListContainer extends Component {
     getPostList = () => {
