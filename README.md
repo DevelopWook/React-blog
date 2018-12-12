@@ -78,12 +78,48 @@
 
 - **Login**
 
-  > 세션 어쩌구를 이용한 로그인 방식  
-  > 비 로그인 상태에서는 게시글 조회만 가능  
-  > 정해둔 비밀번호로 관리자 로그인을 하면 포스트 생성, 수정, 삭제 가능
+  `blog-backend/.env`
+  ```js
+  ADMIN_PASS=react
+  ```
+
+  `blog-backend/src/index.js`
+  ```js
+  const session = require('koa-session');
+
+  ...
+
+  const {
+    ...
+    COOKIE_SIGN_KEY: signKey
+  } = process.env;
+
+  ...
+
+  const sessionConfig = {
+    maxAge: 86400000, // 하루
+  }
+
+  app.use(session(sessionConfig, app));
+  app.keys = [signKey];
+  ```
+  > koa-session을 이용하여 로그인을 구현하였다.  
+
+  `blog-backend/src/api/posts/index.js`
+  ```js
+  posts.post('/', postCtrl.checkLogin, postCtrl.write);
+  posts.delete('/:id', postCtrl.checkLogin, postCtrl.checkObjectId, postCtrl.remove);
+  posts.patch('/:id', postCtrl.checkLogin, postCtrl.checkObjectId, postCtrl.update);
+  ```
+  > backend에서 생성, 수정, 삭제 api에서 checkLogin으로 먼저 검증한다.  
+  > 비 로그인 상태에서는 게시글 조회만 가능하다.  
+  > 정해둔 비밀번호로 관리자 로그인을 하면 포스트 생성, 수정, 삭제가 가능하다.
 
 - **Pagination**
 
+  ![pagination.gif](./etc/pagination.gif)
+
+  `blog-backend/src/api/posts/posts.ctrl.js`
   ```js
   const posts = await Post.find(query)
             ...
@@ -96,21 +132,41 @@
   > backend에서 skip(offet)과 limit로 해당 페이지에 맞게  
   > 10개 분량의 포스트를 응답해준다.
 
+  `blog-backend/src/api/posts/posts.ctrl.js`
   ```js
+  ctx.set('Last-Page', Math.ceil(pageCount / 10));
+  ```
+
+  `blog-frontend/src/store/modules/list.js`
+  ```js
+  const lastPage = action.payload.headers['last-page'];
+  return state.set('posts', fromJS(posts))
+              .set('lastPage', parseInt(lastPage, 10));
+  ```
+  `blog-frontend/src/components/list/Pagination/Pagination.js`
+  ```js
+  <Button disabled={page === lastPage} to={createPagePath(page+1)}>
+    다음 페이지
+  </Button>
   ```
 
   > 첫 페이지에서는 이전 페이지 버튼이 비활성화 되고  
-  > 마지막 페이지에서는 다음 페이지 버튼이 비활성화 된다.
+  > 마지막 페이지에서는 다음 페이지 버튼이 비활성화 된다.  
+  > Response Header에 Last-Page를 추가하는 방식을 사용하였다.  
+  > 포스트 리스트를 불러올 때 Last-Page 값을 받아서 Redux State에 저장하였다.
 
 - **tag**
 
   > 포스트를 생성, 수정 할 시에 태그 설정 가능  
   > 태그를 클릭 시 해당 태그로 포스트 목록 조회
 
+- **keyFrames를 이용한 애니메이션** p602
+
 - **포스트 내용 미리보기**
 
   ![post-preview.jpg](./etc/post-preview.jpg)
 
+  `blog-backend/src/api/posts/posts.ctrl.js`
   ```js
   const limitBodyLength = post => ({
         ...post,
@@ -119,7 +175,7 @@
   ctx.body = posts.map(limitBodyLength);
   ```
 
-  > 200자가 넘으면 50자 만큼만 잘라서 보여준다.  
+  > 200자가 넘으면 50자 정도만 잘라서 보여준다.  
   > 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
 
 - **markdown editor**
