@@ -158,10 +158,14 @@
 
 - **tag**
 
+  ![tag-search.gif](./etc/tag-search.gif)
+
   > 포스트를 생성, 수정 할 시에 태그 설정 가능  
   > 태그를 클릭 시 해당 태그로 포스트 목록 조회
 
-- **keyFrames를 이용한 애니메이션** p602
+- **keyFrames를 이용한 애니메이션**
+
+  ![keyframes.gif](./etc/keyframes.gif)
 
 - **포스트 내용 미리보기**
 
@@ -178,6 +182,28 @@
 
   > 200자가 넘으면 50자 정도만 잘라서 보여준다.  
   > 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
+
+- **react-helmet으로 페이지 head 작성**
+
+  `blog-frontend/src/containers/post/Post.js`
+  ```js
+  {/* body 값이 있을 때만 Helmet 설정 */}
+  {body && (
+      <Helmet>
+          <title>{title}</title>
+          {/* description이 너무 길면 안되니까 200자 제한 */}
+          <meta name="description" content={removeMd(body).slice(0, 200)} />
+      </Helmet>
+  )}
+  ```
+  `blog-frontend/src/pages/ListPage.js`
+  ```js
+  <Helmet>
+      <title>{title}</title>
+  </Helmet>
+  ```
+  
+  > react-helmet을 사용하여 페이지마다 title과 description을 넣어주었다.
 
 - **markdown editor**
 
