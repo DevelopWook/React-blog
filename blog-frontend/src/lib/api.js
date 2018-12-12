@@ -23,4 +23,4 @@ export const checkLogin = () =>
     axios.get('/api/auth/check');
 
 export const logout = () =>
-    axios.post('api/auth/logout');
+    axios.post('/api/auth/logout');
