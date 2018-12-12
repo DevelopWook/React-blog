@@ -104,6 +104,7 @@
   app.keys = [signKey];
   ```
   > koa-session을 이용하여 로그인을 구현하였다.  
+  > logged값을 설정하여 로그인상태를 구분하였다.  
 
   `blog-backend/src/api/posts/index.js`
   ```js
