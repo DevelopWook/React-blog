@@ -268,5 +268,13 @@
 
 ## 실행 방법
 
+### 준비
+<!-- TODO: 링크 걸기 -->
+
+1. node 설치
+2. mongoDB 설치
+
+### 실행
+
 1.   DownLoad Zip
 2.   Execute `project/door/door.htm`
