@@ -1,6 +1,17 @@
 # React-blog
 
-<!-- TODO: 목차 만들기 -->
+## 목차
+
+- [개요](#개요)
+- [제작과정](#제작과정)
+- [개발 환경](#개발-환경)
+- [주요 기술](#주요-기술)
+- [세부내용](#세부내용)
+    - [웹 사이트 구조](#웹-사이트-구조)
+    - [전체 Process](#전체-Process)
+    - [REST API](#REST-API)
+    - [주요 기능](#주요-기능)
+- [실행 방법](#실행-방법)    
 
 ## 개요
 
@@ -32,7 +43,6 @@
 
 ## 주요 기술
 
-<!-- TODO: 라이브러리에 링크 달기 -->
 - 다양한 library 사용
     - [redux](https://www.npmjs.com/package/redux) (ver 4.0.1)
     - [react-redux](https://www.npmjs.com/package/react-redux) (ver 5.1.1)
@@ -59,7 +69,6 @@
 - REST API
 - keyframes
 - react-helmet으로 head 설정
-<a href="http://stackoverflow.com" target="_blank">Go</a> 
 
 ## 세부내용
 
