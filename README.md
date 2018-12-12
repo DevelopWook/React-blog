@@ -32,26 +32,33 @@
 
 ## 주요 기술
 
+<!-- TODO: 라이브러리에 링크 달기 -->
 - 다양한 library 사용
-    - axios (ver 0.18.0)
-    - immutable.js (ver 4.0.0)
-    - classNames (ver 2.2.6)
-    - dotenv (ver 6.0.0)
-    - codemirror (ver 5.42.0)
-    - marked (ver 0.5.2)
-    - moment (ver 2.22.2)
-    - open-color (ver 1.6.3)
-    - prismjs (ver 1.15.0)
-    - query-string (ver 5.1.1)
-    - react-helmet (ver 5.2.0)
-    - redux (ver 4.0.1)
-    - react-redux (ver 5.1.1)
-    - redux-actions (ver 2.6.4)
-    - redux-pender (ver 1.2.1)
-    - react-router-dom (ver 4.3.1)
+    - [redux](https://www.npmjs.com/package/redux) (ver 4.0.1)
+    - [react-redux](https://www.npmjs.com/package/react-redux) (ver 5.1.1)
+    - [redux-actions](https://www.npmjs.com/package/redux-actions) (ver 2.6.4)
+    - [redux-pender](https://www.npmjs.com/package/redux-pender) (ver 1.2.1)
+    - [react-router-dom](https://www.npmjs.com/package/react-router-dom) (ver 4.3.1)
+    - [axios](https://www.npmjs.com/package/axios) (ver 0.18.0)
+    - [query-string](https://www.npmjs.com/package/query-string) (ver 5.1.1)
+    - [immutable.js](https://www.npmjs.com/package/immutable) (ver 4.0.0)
+    - [codemirror](https://www.npmjs.com/package/codemirror) (ver 5.42.0)
+    - [marked](https://www.npmjs.com/package/marked) (ver 0.5.2)
+    - [prismjs](https://www.npmjs.com/package/prismjs) (ver 1.15.0)
+    - [moment](https://www.npmjs.com/package/moment) (ver 2.22.2)
+    - [open-color](https://www.npmjs.com/package/open-color) (ver 1.6.3)
+    - [classNames](https://www.npmjs.com/package/classnames) (ver 2.2.6)
+    - [dotenv](https://www.npmjs.com/package/dotenv) (ver 6.0.0)
+    - [react-helmet](https://www.npmjs.com/package/react-helmet) (ver 5.2.0)
 - Redux를 이용한 상태 관리
 - Single Page Application
-- Pagination
+- Login 기능
+- 마크다운 에디터로 블로그 작성
+- Pagination 기능
+- tag 기능
+- REST API
+- keyframes
+- react-helmet으로 head 설정
 
 ## 세부내용
 
@@ -116,6 +123,22 @@
   > 비 로그인 상태에서는 게시글 조회만 가능하다.  
   > 정해둔 비밀번호로 관리자 로그인을 하면 포스트 생성, 수정, 삭제가 가능하다.
 
+- **포스트 내용 미리보기**
+
+  ![post-preview.jpg](./etc/post-preview.jpg)
+
+  `blog-backend/src/api/posts/posts.ctrl.js`
+  ```js
+  const limitBodyLength = post => ({
+        ...post,
+        body: post.body.length < 200 ? post.body : `${post.body.slice(0, 50)}...ㅎㅎ by pbw`
+  })
+  ctx.body = posts.map(limitBodyLength);
+  ```
+
+  > 200자가 넘으면 50자 정도만 잘라서 보여준다.  
+  > 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
+
 - **Pagination**
 
   ![pagination.gif](./etc/pagination.gif)
@@ -156,32 +179,24 @@
   > Response Header에 Last-Page를 추가하는 방식을 사용하였다.  
   > 포스트 리스트를 불러올 때 Last-Page 값을 받아서 Redux State에 저장하였다.
 
+- **markdown editor**
+
+  ![markdown-editor](./etc/markdown-editor.jpg)
+
+  > Editor에 CodeMirror 라이브러리를 사용하여 코드에 색상을 입혀주었다.  
+  > Preview에 marked를 이용하여 마크다운 코드를 HTML로 변환하여 보여주고  
+  > primjs를 이용하여 색상을 입혀주었다.
+
+- **markdown editor resize**
+
+  ![markdown-editor-resize](./etc/markdown-editor-resize.gif)
+
 - **tag**
 
   ![tag-search.gif](./etc/tag-search.gif)
 
   > 포스트를 생성, 수정 할 시에 태그 설정 가능  
   > 태그를 클릭 시 해당 태그로 포스트 목록 조회
-
-- **keyFrames를 이용한 애니메이션**
-
-  ![keyframes.gif](./etc/keyframes.gif)
-
-- **포스트 내용 미리보기**
-
-  ![post-preview.jpg](./etc/post-preview.jpg)
-
-  `blog-backend/src/api/posts/posts.ctrl.js`
-  ```js
-  const limitBodyLength = post => ({
-        ...post,
-        body: post.body.length < 200 ? post.body : `${post.body.slice(0, 50)}...ㅎㅎ by pbw`
-  })
-  ctx.body = posts.map(limitBodyLength);
-  ```
-
-  > 200자가 넘으면 50자 정도만 잘라서 보여준다.  
-  > 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
 
 - **react-helmet으로 페이지 head 작성**
 
@@ -205,17 +220,9 @@
   
   > react-helmet을 사용하여 페이지마다 title과 description을 넣어주었다.
 
-- **markdown editor**
+- **keyFrames를 이용한 애니메이션**
 
-  ![markdown-editor](./etc/markdown-editor.jpg)
-
-  > Editor에 CodeMirror 라이브러리를 사용하여 코드에 색상을 입혀주었다.  
-  > Preview에 marked를 이용하여 마크다운 코드를 HTML로 변환하여 보여주고  
-  > primjs를 이용하여 색상을 입혀주었다.
-
-- **markdown editor resize**
-
-  ![markdown-editor-resize](./etc/markdown-editor-resize.gif)
+  ![keyframes.gif](./etc/keyframes.gif)
 
 - **axios로 REST API 요청**
 
