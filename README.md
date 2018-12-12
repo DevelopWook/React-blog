@@ -48,6 +48,7 @@
     - react-redux (ver 5.1.1)
     - redux-actions (ver 2.6.4)
     - redux-pender (ver 1.2.1)
+    - react-router-dom (ver 4.3.1)
 - Redux를 이용한 상태 관리
 - Single Page Application
 - Pagination
@@ -62,32 +63,108 @@
 
 ![process](./etc/process.gif)
 
+
+### REST API
+
+| 종류                | 기능                |
+| ------------------- | :----------------- |
+| POST `/posts`       | 포스트 작성         |
+| GET `/posts`        | 포스트 목록 조회     |
+| GET `/posts/:id`    | 특정 포스트 조회     |
+| DELETE `/posts/:id` | 특정 포스트 삭제     |
+| PATCH `/posts/:id`  | 특정 포스트 업데이트 |
+
 ### 주요 기능
 
 - **Login**
 
-> 세션 어쩌구를 이용한 로그인 방식  
-> 비 로그인 상태에서는 게시글 조회만 가능  
-> 정해둔 비밀번호로 관리자 로그인을 하면 포스트 생성, 수정, 삭제 가능
+  > 세션 어쩌구를 이용한 로그인 방식  
+  > 비 로그인 상태에서는 게시글 조회만 가능  
+  > 정해둔 비밀번호로 관리자 로그인을 하면 포스트 생성, 수정, 삭제 가능
 
 - **Pagination**
 
-> 어떠한걸 이용하였고 요청할 때 offset과 limit
+  ```js
+  const posts = await Post.find(query)
+            ...
+            .limit(10)
+            .skip((page - 1) * 10)
+            ...
+  ```
+
+  > frontend에서 포스트 리스트를 요청 할 때 page값을 넘겨 주면  
+  > backend에서 skip(offet)과 limit로 해당 페이지에 맞게  
+  > 10개 분량의 포스트를 응답해준다.
+
+  ```js
+  ```
+
+  > 첫 페이지에서는 이전 페이지 버튼이 비활성화 되고  
+  > 마지막 페이지에서는 다음 페이지 버튼이 비활성화 된다.
 
 - **tag**
 
-> 포스트를 생성, 수정 할 시에 태그 설정 가능  
-> 태그를 클릭 시 해당 태그로 포스트 목록 조회
+  > 포스트를 생성, 수정 할 시에 태그 설정 가능  
+  > 태그를 클릭 시 해당 태그로 포스트 목록 조회
 
 - **포스트 내용 미리보기**
 
-> 200자 만큼만 잘라서 보여준다.  
-> 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
+  ![post-preview.jpg](./etc/post-preview.jpg)
+
+  ```js
+  const limitBodyLength = post => ({
+        ...post,
+        body: post.body.length < 200 ? post.body : `${post.body.slice(0, 50)}...ㅎㅎ by pbw`
+  })
+  ctx.body = posts.map(limitBodyLength);
+  ```
+
+  > 200자가 넘으면 50자 만큼만 잘라서 보여준다.  
+  > 마지막에 ㅎㅎ by pbw는 실험적으로 붙여보았다.
 
 - **markdown editor**
 
-> 어떤 라이브러리를 사용하여 markdown editor와 preview 기능 구현
+  ![markdown-editor](./etc/markdown-editor.jpg)
 
+  > Editor에 CodeMirror 라이브러리를 사용하여 코드에 색상을 입혀주었다.  
+  > Preview에 marked를 이용하여 마크다운 코드를 HTML로 변환하여 보여주고  
+  > primjs를 이용하여 색상을 입혀주었다.
+
+- **markdown editor resize**
+
+  ![markdown-editor-resize](./etc/markdown-editor-resize.gif)
+
+- **axios로 REST API 요청**
+
+  `blog-frontend/src/lib/api.js`
+  ```js
+  import axios from 'axios';
+  import queryString from 'query-string';
+
+  export const writePost = ({ title, body, tags }) =>
+    axios.post('/api/posts', { title, body, tags });
+
+  export const getPost = (id) =>
+    axios.get(`/api/posts/${id}`);
+
+  export const getPostList = ({ tag, page }) =>
+    axios.get(`/api/posts/?${queryString.stringify({ tag, page })}`);
+
+  export const editPost = ({ id, title, body, tags }) =>
+    axios.patch(`/api/posts/${id}`, { title, body, tags });
+
+  export const removePost = (id) =>
+    axios.delete(`/api/posts/${id}`);
+
+  export const login = (password) =>
+    axios.post('/api/auth/login', { password })
+
+  export const checkLogin = () =>
+    axios.get('/api/auth/check');
+
+  export const logout = () =>
+    axios.post('/api/auth/logout');
+  ```
 
 ## 실행 방법
 
