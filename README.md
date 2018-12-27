@@ -163,7 +163,7 @@
   ```
 
   > frontend에서 포스트 리스트를 요청 할 때 page값을 넘겨 주면  
-  > backend에서 skip(offet)과 limit로 해당 페이지에 맞게  
+  > backend에서 skip(offset)과 limit로 해당 페이지에 맞게  
   > 10개 분량의 포스트를 응답해준다.
 
   `blog-backend/src/api/posts/posts.ctrl.js`
