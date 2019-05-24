@@ -271,10 +271,11 @@
 ### 준비
 <!-- TODO: 링크 걸기 -->
 
-1. node 설치
-2. mongoDB 설치
+1. [node](https://nodejs.org/) 설치
+2. [mongoDB](https://www.mongodb.com/) 설치
 
 ### 실행
 
-1.   DownLoad Zip
-2.   Execute `project/door/door.htm`
+1. clone this repository
+2. run `npm install` in both `blog-backend` and `blog-frontend`
+3. run `npm start` in both `blog-backend` and `blog-frontend`
