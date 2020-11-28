@@ -1,5 +1,7 @@
 # React-blog
 
+> [Next-TS로 교체중입니다.](https://github.com/ZungTa/React-Blog-Next-TS)
+
 ## 목차
 
 - [개요](#개요)
